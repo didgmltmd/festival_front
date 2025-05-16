@@ -192,6 +192,7 @@ export default function CounterPage() {
         <OrderListModal
             open={isOrderListModalOpen}
             onClose={() => setIsOrderListModalOpen(false)}
+            onUpdate={() => fetchOrderedData()} 
         />
 
         <ASectionOrderModal

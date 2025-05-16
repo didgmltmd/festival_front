@@ -18,7 +18,7 @@ export default function BSectionPage() {
 
   const fetchInitialOrders = async () => {
     try {
-      const res = await axios.get("https://festival-backend-qydq.onrender.com/api/kitchen/A");
+      const res = await axios.get("https://festival-backend-qydq.onrender.com/api/kitchen/B");
       setOrders(res.data);
     } catch (err) {
       console.error("초기 주문 데이터 로드 실패:", err);

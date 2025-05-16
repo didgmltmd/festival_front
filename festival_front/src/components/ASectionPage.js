@@ -25,7 +25,7 @@ export default function ASectionPage() {
     }
   };
 
-  // ✅ 서빙 완료 API 호출
+  // 서빙 완료 API 호출
   const confirmServe = async () => {
     if (!confirmData) return;
 
@@ -103,7 +103,7 @@ export default function ASectionPage() {
         ))
       )}
 
-      {/* ✅ 확인 모달 */}
+      {/* 확인 모달 */}
       <Dialog
         open={Boolean(confirmData)}
         onClose={() => setConfirmData(null)}
