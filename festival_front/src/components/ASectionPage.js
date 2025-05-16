@@ -14,8 +14,9 @@ import socket from "../socket";
 
 export default function ASectionPage() {
   const [orders, setOrders] = useState([]);
-  const [confirmData, setConfirmData] = useState(null); // { timestamp, itemIndex, name }
+  const [confirmData, setConfirmData] = useState(null);
 
+  // A구역 초기 주문 불러오기
   const fetchInitialOrders = async () => {
     try {
       const res = await axios.get("https://festival-backend-qydq.onrender.com/api/kitchen/A");
@@ -25,48 +26,55 @@ export default function ASectionPage() {
     }
   };
 
-  // 서빙 완료 API 호출
+  // 조리 및 서빙 완료 처리
   const confirmServe = async () => {
     if (!confirmData) return;
-
     const { timestamp, itemIndex } = confirmData;
+
     try {
       await axios.patch(
         `https://festival-backend-qydq.onrender.com/api/kitchen/${timestamp}/${itemIndex}/serve`
       );
-
-      // UI에서 제거
       setOrders((prev) =>
-        prev.filter((item) => !(item.timestamp === timestamp && item.itemIndex === itemIndex))
+        prev.filter(
+          (item) => !(item.timestamp === timestamp && item.itemIndex === itemIndex)
+        )
       );
-      setConfirmData(null); 
+      setConfirmData(null);
     } catch (err) {
       console.error("서빙 완료 처리 실패:", err);
       alert("서빙 처리에 실패했습니다.");
     }
   };
 
+  // 주문 수신 및 알림 처리
   useEffect(() => {
     fetchInitialOrders();
 
-    socket.on("order:A", (data) => {
-      console.log("수신된 주문:", data);
+    const handleNewOrder = (data) => {
+      console.log("📡 A구역 수신 주문:", data);
       if (Array.isArray(data)) {
         setOrders((prev) => [...prev, ...data]);
-      } else {
-        console.warn("잘못된 데이터 형식:", data);
+
+        // 🔊 알림음 재생
+        const audio = new Audio("/sounds/notification.mp3");
+        audio.play().catch((err) =>
+          console.warn("🔇 자동재생 실패 (브라우저 정책):", err)
+        );
       }
-    });
+    };
+
+    socket.on("order:A", handleNewOrder);
 
     return () => {
-      socket.off("order:A");
+      socket.off("order:A", handleNewOrder);
     };
   }, []);
 
   return (
     <Box p={3}>
       <Typography variant="h5" gutterBottom>
-        🍱 A구역 주문 목록
+        🍱 A구역 조리 대기 목록
       </Typography>
 
       {orders.length === 0 ? (
@@ -76,19 +84,18 @@ export default function ASectionPage() {
           <Paper
             key={`${item.timestamp}-${item.itemIndex}`}
             elevation={2}
-            sx={{ p: 2, mb: 2 }}
+            sx={{ p: 2, mb: 2, borderLeft: "4px solid #4caf50" }}
           >
             <Typography variant="subtitle1" fontWeight={600}>
               {item.name} ({item.quantity}개)
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
               테이블 번호: {item.tableNumber}
             </Typography>
             <Button
               variant="contained"
               color="success"
               size="small"
-              sx={{ mt: 1 }}
               onClick={() =>
                 setConfirmData({
                   timestamp: item.timestamp,
@@ -103,11 +110,8 @@ export default function ASectionPage() {
         ))
       )}
 
-      {/* 확인 모달 */}
-      <Dialog
-        open={Boolean(confirmData)}
-        onClose={() => setConfirmData(null)}
-      >
+      {/* 서빙 확인 모달 */}
+      <Dialog open={!!confirmData} onClose={() => setConfirmData(null)}>
         <DialogTitle>서빙 완료 확인</DialogTitle>
         <DialogContent>
           정말로 <strong>{confirmData?.name}</strong> 항목을 완료 처리하시겠습니까?
