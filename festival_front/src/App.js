@@ -1,24 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
+import MainPage from './components/MainPage';
+import ASectionPage from './components/ASectionPage';
+import BSectionPage from './components/BSectionPage';
+import CSectionPage from './components/CSectionPage';
+import CounterPage from './components/CounterPage';
+import { Routes, Route  } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/kitchen/A" element={<ASectionPage />} />
+        <Route path="/kitchen/B" element={<BSectionPage />} />
+        <Route path="/kitchen/C" element={<CSectionPage />} />
+        <Route path="/counter" element={<CounterPage />} />
+      </Routes>
+    </>
   );
 }
 
