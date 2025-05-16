@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Typography,
   Box,
@@ -15,18 +15,35 @@ import socket from "../socket";
 export default function ASectionPage() {
   const [orders, setOrders] = useState([]);
   const [confirmData, setConfirmData] = useState(null);
+  const audioRef = useRef(null);
 
-  // A구역 초기 주문 불러오기
+  // ✅ 초기 알림음 unlock 설정 (iOS 대응)
+  useEffect(() => {
+    audioRef.current = new Audio("/sounds/notification.mp3");
+
+    const unlockAudio = () => {
+      audioRef.current.play().catch(() => {});
+      window.removeEventListener("touchstart", unlockAudio);
+      window.removeEventListener("click", unlockAudio);
+    };
+
+    window.addEventListener("touchstart", unlockAudio);
+    window.addEventListener("click", unlockAudio);
+  }, []);
+
+  // ✅ 초기 주문 불러오기
   const fetchInitialOrders = async () => {
     try {
-      const res = await axios.get("https://festival-backend-qydq.onrender.com/api/kitchen/A");
+      const res = await axios.get(
+        "https://festival-backend-qydq.onrender.com/api/kitchen/A"
+      );
       setOrders(res.data);
     } catch (err) {
       console.error("초기 주문 데이터 로드 실패:", err);
     }
   };
 
-  // 조리 및 서빙 완료 처리
+  // ✅ 서빙 완료 처리
   const confirmServe = async () => {
     if (!confirmData) return;
     const { timestamp, itemIndex } = confirmData;
@@ -37,7 +54,8 @@ export default function ASectionPage() {
       );
       setOrders((prev) =>
         prev.filter(
-          (item) => !(item.timestamp === timestamp && item.itemIndex === itemIndex)
+          (item) =>
+            !(item.timestamp === timestamp && item.itemIndex === itemIndex)
         )
       );
       setConfirmData(null);
@@ -47,7 +65,7 @@ export default function ASectionPage() {
     }
   };
 
-  // 주문 수신 및 알림 처리
+  // ✅ 소켓 수신 및 알림음 재생
   useEffect(() => {
     fetchInitialOrders();
 
@@ -56,19 +74,15 @@ export default function ASectionPage() {
       if (Array.isArray(data)) {
         setOrders((prev) => [...prev, ...data]);
 
-        // 🔊 알림음 재생
-        const audio = new Audio("/sounds/notification.mp3");
-        audio.play().catch((err) =>
-          console.warn("🔇 자동재생 실패 (브라우저 정책):", err)
-        );
+        // 알림음 재생
+        audioRef.current?.play().catch((err) => {
+          console.warn("🔇 오디오 재생 실패:", err);
+        });
       }
     };
 
     socket.on("order:A", handleNewOrder);
-
-    return () => {
-      socket.off("order:A", handleNewOrder);
-    };
+    return () => socket.off("order:A", handleNewOrder);
   }, []);
 
   return (
@@ -110,7 +124,7 @@ export default function ASectionPage() {
         ))
       )}
 
-      {/* 서빙 확인 모달 */}
+      {/* ✅ 서빙 확인 모달 */}
       <Dialog open={!!confirmData} onClose={() => setConfirmData(null)}>
         <DialogTitle>서빙 완료 확인</DialogTitle>
         <DialogContent>
