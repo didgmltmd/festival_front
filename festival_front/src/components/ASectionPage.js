@@ -17,7 +17,7 @@ export default function ASectionPage() {
   const [confirmData, setConfirmData] = useState(null);
   const audioRef = useRef(null);
 
-  // ✅ 초기 알림음 unlock 설정 (iOS 대응)
+  // 초기 알림음 unlock 설정 (iOS 대응)
   useEffect(() => {
     audioRef.current = new Audio("/sounds/notification.mp3");
 
@@ -31,7 +31,7 @@ export default function ASectionPage() {
     window.addEventListener("click", unlockAudio);
   }, []);
 
-  // ✅ 초기 주문 불러오기
+  // 초기 주문 불러오기
   const fetchInitialOrders = async () => {
     try {
       const res = await axios.get(
@@ -43,7 +43,7 @@ export default function ASectionPage() {
     }
   };
 
-  // ✅ 서빙 완료 처리
+  // 서빙 완료 처리
   const confirmServe = async () => {
     if (!confirmData) return;
     const { timestamp, itemIndex } = confirmData;
@@ -65,7 +65,7 @@ export default function ASectionPage() {
     }
   };
 
-  // ✅ 소켓 수신 및 알림음 재생
+  // 소켓 수신 및 알림음 재생
   useEffect(() => {
     fetchInitialOrders();
 
@@ -124,7 +124,7 @@ export default function ASectionPage() {
         ))
       )}
 
-      {/* ✅ 서빙 확인 모달 */}
+      {/* 서빙 확인 모달 */}
       <Dialog open={!!confirmData} onClose={() => setConfirmData(null)}>
         <DialogTitle>서빙 완료 확인</DialogTitle>
         <DialogContent>

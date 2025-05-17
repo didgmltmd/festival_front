@@ -4,38 +4,98 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
-  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+  Button
 } from "@mui/material";
 
+
 export default function TableInputModal({ open, onClose, onSubmit }) {
-  const [tableNumber, setTableNumber] = useState("");
+  const [xValue,setXValue] = useState();
+  const [yValue,setYValue] = useState();
+
+  const tableXPosition = ["A","B","C","D","E","F","G","H","I","J"];
+  const tableYPosition = ["1","2","3","4","5","6","7","8","9","10"];
 
   const handleSubmit = () => {
-    const parsed = parseInt(tableNumber);
-    if (isNaN(parsed) || parsed < 0) {
-      alert("올바른 테이블 번호를 입력해주세요.");
-      return;
-    }
+    const parsed = xValue + "-" + yValue;
+
     onSubmit(parsed);
-    setTableNumber("");
+    setXValue("");
+    setYValue("");
     onClose();
+  };
+
+  const handleXChange = (event, newValue) => {
+    setXValue(newValue);
+  };
+
+  const handleYChange = (event, newValue) => {
+    setYValue(newValue);
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>🪑 테이블 번호 입력</DialogTitle>
-      <DialogContent>
-        <TextField
-          label="테이블 번호"
-          type="number"
-          fullWidth
-          value={tableNumber}
-          onChange={(e) => setTableNumber(e.target.value)}
-          autoFocus
-          inputProps={{ min: 0 }}
-          sx={{ mt: 1 }}
-        />
+      <DialogContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',  // 수평 중앙 정렬
+            justifyContent: 'center', // 수직 중앙 정렬 (필요시)
+            gap: 2,
+        }}>
+        <ToggleButtonGroup
+            value={xValue}
+            exclusive
+            onChange={handleXChange}
+            aria-label="X table position"
+          >
+            {tableXPosition.map((item) => (
+              <ToggleButton key={item} value={item} aria-label={item} color="primary"
+                  sx={{
+                      width: 48,
+                      height: 48,
+                      fontWeight: 'bold',
+                      '&.Mui-selected': {
+                        backgroundColor: 'primary.main',
+                        color: 'white',
+                      },
+                      '&.Mui-selected:hover': {
+                        backgroundColor: 'primary.dark',
+                      },
+                  }}>
+                {item}
+              </ToggleButton>
+            ))}
+        </ToggleButtonGroup>
+         
+         <ToggleButtonGroup
+            value={yValue}
+            exclusive
+            onChange={handleYChange}
+            aria-label="X table position"
+          >
+            {tableYPosition.map((item) => (
+              <ToggleButton key={item} value={item} aria-label={item} color="primary"
+                  sx={{
+                      width: 48,
+                      height: 48,
+                      fontWeight: 'bold',
+                      '&.Mui-selected': {
+                        backgroundColor: 'primary.main',
+                        color: 'white',
+                      },
+                      '&.Mui-selected:hover': {
+                        backgroundColor: 'primary.dark',
+                      },
+                  }}>
+                {item}
+              </ToggleButton>
+            ))}
+        </ToggleButtonGroup>
+
+
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>취소</Button>
@@ -46,3 +106,4 @@ export default function TableInputModal({ open, onClose, onSubmit }) {
     </Dialog>
   );
 }
+
