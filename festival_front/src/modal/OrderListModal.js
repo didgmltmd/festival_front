@@ -9,17 +9,19 @@ import {
   Box,
   Divider,
   IconButton,
-  DialogContentText
+  DialogContentText,
 } from "@mui/material";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
+import socket from "../socket";
 
-export default function OrderListModal({ open, onClose ,onUpdate}) {
+export default function OrderListModal({ open, onClose, onUpdate }) {
   const [orders, setOrders] = useState([]);
   const [deleteTarget, setDeleteTarget] = useState(null); // 삭제할 주문
 
   const fetchOrders = () => {
-    axios.get("https://festival-backend-qydq.onrender.com/api/orders")
+    axios
+      .get("https://festival-backend-qydq.onrender.com/api/orders")
       .then((res) => setOrders(res.data))
       .catch((err) => console.error("주문 내역 불러오기 실패:", err));
   };
@@ -28,15 +30,22 @@ export default function OrderListModal({ open, onClose ,onUpdate}) {
     if (open) fetchOrders();
   }, [open]);
 
- const handleDelete = () => {
+  const handleDelete = () => {
   if (!deleteTarget) return;
-  axios.delete(`https://festival-backend-qydq.onrender.com/api/orders/${deleteTarget.timestamp}`)
+
+  const { timestamp } = deleteTarget;
+
+  axios
+    .delete(
+      `https://festival-backend-qydq.onrender.com/api/orders/${encodeURIComponent(timestamp)}`
+    )
     .then(() => {
       setDeleteTarget(null);
-      fetchOrders();   
-      onUpdate();       
+      fetchOrders();  // 주문 리스트 다시 불러오기
+      onUpdate();     // 다른 곳에 반영 필요할 경우
     })
     .catch((err) => {
+      console.log(timestamp);
       console.error("주문 삭제 실패:", err);
       alert("주문 삭제에 실패했습니다.");
     });
@@ -49,19 +58,25 @@ export default function OrderListModal({ open, onClose ,onUpdate}) {
         <DialogTitle>🧾 전체 주문 내역</DialogTitle>
         <DialogContent dividers>
           {orders.length === 0 ? (
-            <Typography color="textSecondary">주문 내역이 없습니다.</Typography>
+            <Typography color="textSecondary">
+              주문 내역이 없습니다.
+            </Typography>
           ) : (
             orders.map((order, idx) => (
               <Box key={idx} sx={{ mb: 2, position: "relative" }}>
                 <Typography variant="subtitle1" fontWeight={600}>
-                  테이블 {order.tableNumber}번 - {new Date(order.timestamp).toLocaleString()}
+                  테이블 {order.tableNumber}번 -{" "}
+                  {new Date(order.timestamp).toLocaleString()}
                 </Typography>
                 {order.items.map((item, i) => (
                   <Typography key={i} sx={{ pl: 2 }}>
                     • {item.name} - {item.quantity}개
                   </Typography>
                 ))}
-                <Typography variant="body2" sx={{ pl: 2, mt: 0.5, fontWeight: 500 }}>
+                <Typography
+                  variant="body2"
+                  sx={{ pl: 2, mt: 0.5, fontWeight: 500 }}
+                >
                   총액: {order.totalPrice.toLocaleString()}원
                 </Typography>
                 <IconButton
@@ -77,12 +92,17 @@ export default function OrderListModal({ open, onClose ,onUpdate}) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} variant="outlined">닫기</Button>
+          <Button onClick={onClose} variant="outlined">
+            닫기
+          </Button>
         </DialogActions>
       </Dialog>
 
       {/* 삭제 확인용 모달 */}
-      <Dialog open={!!deleteTarget} onClose={() => setDeleteTarget(null)}>
+      <Dialog
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+      >
         <DialogTitle>❗ 주문 삭제 확인</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -101,7 +121,9 @@ export default function OrderListModal({ open, onClose ,onUpdate}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteTarget(null)}>취소</Button>
-          <Button onClick={handleDelete} color="error" variant="contained">삭제</Button>
+          <Button onClick={handleDelete} color="error" variant="contained">
+            삭제
+          </Button>
         </DialogActions>
       </Dialog>
     </>

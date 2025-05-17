@@ -58,6 +58,13 @@ export default function BSectionPage() {
             !(item.timestamp === timestamp && item.itemIndex === itemIndex)
         )
       );
+
+      socket.emit("orderDeleted", {
+        timestamp,
+        itemIndexes: [itemIndex],
+      });
+
+
       setConfirmData(null);
     } catch (err) {
       console.error("서빙 완료 처리 실패:", err);
@@ -69,20 +76,38 @@ export default function BSectionPage() {
   useEffect(() => {
     fetchInitialOrders();
 
+    // 새 주문 수신
     const handleNewOrder = (data) => {
       console.log("📡 A구역 수신 주문:", data);
       if (Array.isArray(data)) {
         setOrders((prev) => [...prev, ...data]);
-
-        // 알림음 재생
         audioRef.current?.play().catch((err) => {
           console.warn("🔇 오디오 재생 실패:", err);
         });
       }
     };
 
+    // 주문 삭제 수신
+    const handleOrderDeleted = ({ timestamp, itemIndexes }) => {
+      console.log("🗑️ A구역 수신 삭제:", timestamp, itemIndexes);
+      setOrders((prev) =>
+        prev.filter(
+          (order) =>
+            !(
+              order.timestamp === timestamp &&
+              itemIndexes.includes(order.itemIndex)
+            )
+        )
+      );
+    };
+
     socket.on("order:B", handleNewOrder);
-    return () => socket.off("order:B", handleNewOrder);
+    socket.on("orderDeleted", handleOrderDeleted);
+
+    return () => {
+      socket.off("order:A", handleNewOrder);
+      socket.off("orderDeleted", handleOrderDeleted);
+    }
   }, []);
 
   return (

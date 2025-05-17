@@ -6,8 +6,6 @@ import {
   DialogActions,
   Typography,
   Button,
-  Box,
-  Divider,
   Paper
 } from "@mui/material";
 import axios from "axios";

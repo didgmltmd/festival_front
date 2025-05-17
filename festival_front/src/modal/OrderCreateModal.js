@@ -17,7 +17,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import MenuSelectModal from "./MenuSelectModal";
 import TableInputModal from "./TableInputModal";
-import socket from "../socket";
 
 export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
   const [menuList, setMenuList] = useState([]);
@@ -46,16 +45,20 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
 
   const handleAddToCart = (item, quantity) => {
     let isExist = false;
-    cart.map((data) => {
-      if(data.name === item.name){
-        console.log(data," ",item);
-        data.quantity += quantity;
-        data.total += quantity * item.price;
+    const updatedCart = cart.map((data) => {
+      if (data.name === item.name) {
         isExist = true;
+        return {
+          ...data,
+          quantity: data.quantity + quantity,
+          total: data.total + quantity * item.price,
+        };
       }
-    })
-    if(!isExist){
-      const total = (item.price * quantity);
+      return data;
+    });
+
+    if (!isExist) {
+      const total = item.price * quantity;
       const cartItem = {
         ...item,
         quantity,
@@ -63,9 +66,13 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
         served: false,
       };
       setCart([...cart, cartItem]);
+    } else {
+      setCart(updatedCart);
     }
+
     setSelectedMenu(null);
   };
+
   const handleRemoveItem = (index) => {
     const updated = [...cart];
     updated.splice(index, 1);
@@ -82,13 +89,14 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
       served: false,
     };
 
-    axios.post("https://festival-backend-qydq.onrender.com/api/orders/complete", orderData)
+    axios
+      .post("https://festival-backend-qydq.onrender.com/api/orders/complete", orderData)
       .then(() => {
         onOrderComplete();
         setIsSummaryOpen(false);
         onClose();
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("주문 저장 실패:", err);
         alert("주문 저장에 실패했습니다.");
       });
@@ -100,7 +108,9 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
         <DialogTitle>📝 주문서 작성</DialogTitle>
         <DialogContent sx={{ display: "flex", gap: 2 }}>
           <Box sx={{ flex: 1, backgroundColor: "#f5f5f5", p: 2 }}>
-            <Typography variant="h6" gutterBottom>🛒 장바구니</Typography>
+            <Typography variant="h6" gutterBottom>
+              🛒 장바구니
+            </Typography>
             <List>
               {cart.map((item, idx) => (
                 <ListItem key={idx} divider>
@@ -108,7 +118,9 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
                     primary={`${item.name} (${item.quantity}개)`}
                     secondary={`${item.total.toLocaleString()}원`}
                   />
-                  <IconButton onClick={() => handleRemoveItem(idx)}><DeleteIcon /></IconButton>
+                  <IconButton onClick={() => handleRemoveItem(idx)}>
+                    <DeleteIcon />
+                  </IconButton>
                 </ListItem>
               ))}
             </List>
@@ -129,7 +141,9 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
           </Box>
 
           <Box sx={{ flex: 1, backgroundColor: "#fff", p: 2 }}>
-            <Typography variant="h6" gutterBottom>📋 메뉴</Typography>
+            <Typography variant="h6" gutterBottom>
+              📋 메뉴
+            </Typography>
             <List>
               {menuList.map((item, idx) => (
                 <React.Fragment key={idx}>
@@ -181,14 +195,21 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
           <List>
             {cart.map((item, idx) => (
               <ListItem key={idx}>
-                <ListItemText primary={`${item.name} (${item.quantity}개)`} secondary={`${item.total.toLocaleString()}원`} />
+                <ListItemText
+                  primary={`${item.name} (${item.quantity}개)`}
+                  secondary={`${item.total.toLocaleString()}원`}
+                />
               </ListItem>
             ))}
           </List>
-          <Typography sx={{ mt: 2 }}>총액: {cart.reduce((acc, item) => acc + item.total, 0).toLocaleString()}원</Typography>
+          <Typography sx={{ mt: 2 }}>
+            총액: {cart.reduce((acc, item) => acc + item.total, 0).toLocaleString()}원
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleOrderSubmit} variant="contained" color="primary">주문 확정</Button>
+          <Button onClick={handleOrderSubmit} variant="contained" color="primary">
+            주문 확정
+          </Button>
           <Button onClick={() => setIsSummaryOpen(false)}>취소</Button>
         </DialogActions>
       </Dialog>
