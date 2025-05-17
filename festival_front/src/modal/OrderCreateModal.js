@@ -45,14 +45,25 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
   }, [open]);
 
   const handleAddToCart = (item, quantity) => {
-    const total = item.price * quantity;
-    const cartItem = {
-      ...item,
-      quantity,
-      total,
-      served: false,
-    };
-    setCart([...cart, cartItem]);
+    let isExist = false;
+    cart.map((data) => {
+      if(data.name === item.name){
+        console.log(data," ",item);
+        data.quantity += quantity;
+        data.total += quantity * item.price;
+        isExist = true;
+      }
+    })
+    if(!isExist){
+      const total = (item.price * quantity);
+      const cartItem = {
+        ...item,
+        quantity,
+        total,
+        served: false,
+      };
+      setCart([...cart, cartItem]);
+    }
     setSelectedMenu(null);
   };
   const handleRemoveItem = (index) => {
