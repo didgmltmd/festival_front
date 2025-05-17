@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const zones = ["A", "B", "C"];
+const zones = ["A", "B", "C", "Counter"];
 
 export default function EditMenuModal({ open, onClose, onUpdate }) {
   const [menuList, setMenuList] = useState([]);

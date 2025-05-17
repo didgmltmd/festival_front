@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from "@mui/material";
 import axios from "axios";
 
-const zones = ["A", "B", "C"];
+const zones = ["A", "B", "C", "Counter"];
 
 export default function AddMenuModal({ open, onClose, onAdd }) {
   const [name, setName] = useState("");
