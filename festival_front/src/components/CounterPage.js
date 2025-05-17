@@ -59,11 +59,6 @@ const RightBody = styled(Box)`
   gap: 1rem;
 `;
 
-const HeaderButton = styled(Button)`
-  margin-right: 5rem;
-  margin-left: 10px;
-`;
-
 const OrderedList = styled(Box)`
   display: flex;
   justify-content: space-between;

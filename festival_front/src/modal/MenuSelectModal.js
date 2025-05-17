@@ -7,7 +7,9 @@ import {
   Button,
   TextField,
   Typography,
+  Box
 } from "@mui/material";
+import styled from "styled-components";
 
 export default function MenuSelectModal({ menu, onClose, onConfirm }) {
   const [quantity, setQuantity] = useState(1);
@@ -20,6 +22,13 @@ export default function MenuSelectModal({ menu, onClose, onConfirm }) {
     onConfirm(menu, quantity);
     onClose();
   };
+
+  const handlePlus = () => {
+    setQuantity(quantity + 1);
+  }
+  const handleMinus = () => {
+    setQuantity(quantity -1);
+  }
 
   return (
     <Dialog open={true} onClose={onClose}>
@@ -37,7 +46,19 @@ export default function MenuSelectModal({ menu, onClose, onConfirm }) {
           inputProps={{ min: 1 }}
           sx={{ mt: 2 }}
         />
-      </DialogContent>
+        <ButtonContainer>
+          <Minusutton
+            variant="contained"
+            color="error"
+            onClick={handleMinus}
+            >-</Minusutton>
+          <PlusButton 
+            variant="contained"
+            color="primary"
+            onClick={handlePlus}
+          >+</PlusButton>
+        </ButtonContainer>
+       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>취소</Button>
         <Button onClick={handleConfirm} variant="contained">
@@ -47,3 +68,20 @@ export default function MenuSelectModal({ menu, onClose, onConfirm }) {
     </Dialog>
   );
 }
+
+
+const PlusButton = styled(Button)`
+  display:flex;
+  flex:1
+`
+
+const Minusutton = styled(Button)`
+  display:flex;
+  flex:1;
+`
+
+const ButtonContainer = styled(Box)`
+  display:flex;
+  flex-direction:row;
+  margin-top:1rem;
+`
