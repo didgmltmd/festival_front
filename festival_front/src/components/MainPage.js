@@ -2,6 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Typography, Box } from "@mui/material";
+import ASectionServerPage from "./ASectionServerPage";
+import BSectionServerPage from "./BSectionServerPage";
+import CSectionServerPage from "./CSectionServerPage";
+
 
 const Container = styled(Box)`
   height: 100vh;
@@ -39,6 +43,9 @@ export default function MainPage() {
         <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/A")}>A 구역</ZoneButton>
         <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/B")}>B 구역</ZoneButton>
         <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/C")}>C 구역</ZoneButton>
+        <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/AServer")}>A 구역 서버</ZoneButton>
+        <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/BServer")}>B 구역 서버</ZoneButton>
+        <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/CServer")}>C 구역 서버버</ZoneButton>
       </ButtonGroup>
     </Container>
   );

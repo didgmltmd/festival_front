@@ -3,28 +3,18 @@ import {
   Typography,
   Box,
   Paper,
-  Grid
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import axios from "axios";
 import socket from "../socket";
 
-export default function ASectionPage() {
+export default function ASectionServerPage() {
   const [orders, setOrders] = useState([]);
   const [confirmData, setConfirmData] = useState(null);
-  const audioRef = useRef(null);
-
-  useEffect(() => {
-    audioRef.current = new Audio("/sounds/notification.mp3");
-
-    const unlockAudio = () => {
-      audioRef.current.play().catch(() => {});
-      window.removeEventListener("touchstart", unlockAudio);
-      window.removeEventListener("click", unlockAudio);
-    };
-
-    window.addEventListener("touchstart", unlockAudio);
-    window.addEventListener("click", unlockAudio);
-  }, []);
 
   const fetchInitialOrders = async () => {
     try {
@@ -69,10 +59,8 @@ export default function ASectionPage() {
 
     const handleNewOrder = (data) => {
       if (Array.isArray(data)) {
+        console.log("📡 A구역 새 주문 수신:", data);
         setOrders((prev) => [...prev, ...data]);
-        audioRef.current?.play().catch((err) => {
-          console.warn("🔇 오디오 재생 실패:", err);
-        });
       }
     };
 
@@ -115,45 +103,57 @@ export default function ASectionPage() {
     };
   }, []);
 
-    return (
-  <Box p={3} sx={{ width: "100%" }}>
-    <Typography variant="h4" fontWeight={700} gutterBottom>
-      🍱 C구역 조리 대기 목록
-    </Typography>
+  return (
+    <Box p={3}>
+      <Typography variant="h5" gutterBottom>
+        🍱 A구역 조리 대기 목록
+      </Typography>
 
-    {orders.length === 0 ? (
-      <Typography color="textSecondary">현재 주문이 없습니다.</Typography>
-    ) : (
-      <Grid container spacing={1.5} sx={{ width: "100%", mt: 2 }}>
-        {orders.map((item) => (
-          <Grid item xs={12} sm={6} md={3} key={`${item.timestamp}-${item.itemIndex}`}>
-            <Paper
-                elevation={4}
-                sx={{
-                  width: "100%",
-                  minWidth: 400,
-                  height: "100%",
-                  minHeight: 280,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  p: 3,
-                  borderLeft: "6px solid #4caf50",
-                  boxSizing: "border-box",
-                }}
-              >
-              <Typography variant="h3" fontWeight={700} gutterBottom>
-                {item.name} ({item.quantity}개)
-              </Typography>
-              <Typography variant="h5" color="textSecondary">
-                테이블 번호: {item.tableNumber}
-              </Typography>
-            </Paper>
-          </Grid>
-        ))}
-      </Grid>
-    )}
-  </Box>
-);
+      {orders.length === 0 ? (
+        <Typography color="textSecondary">현재 주문이 없습니다.</Typography>
+      ) : (
+        orders.map((item) => (
+          <Paper
+            key={`${item.timestamp}-${item.itemIndex}`}
+            elevation={2}
+            sx={{ p: 2, mb: 2, borderLeft: "4px solid #4caf50" }}
+          >
+            <Typography variant="subtitle1" fontWeight={600}>
+              {item.name} ({item.quantity}개)
+            </Typography>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+              테이블 번호: {item.tableNumber}
+            </Typography>
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              onClick={() =>
+                setConfirmData({
+                  timestamp: item.timestamp,
+                  itemIndex: item.itemIndex,
+                  name: item.name,
+                })
+              }
+            >
+              조리 및 서빙 완료
+            </Button>
+          </Paper>
+        ))
+      )}
+
+      <Dialog open={!!confirmData} onClose={() => setConfirmData(null)}>
+        <DialogTitle>서빙 완료 확인</DialogTitle>
+        <DialogContent>
+          정말로 <strong>{confirmData?.name}</strong> 항목을 완료 처리하시겠습니까?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmData(null)}>취소</Button>
+          <Button onClick={confirmServe} variant="contained" color="primary">
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
 }
