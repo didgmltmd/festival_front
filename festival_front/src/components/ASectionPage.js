@@ -118,7 +118,7 @@ export default function ASectionPage() {
     return (
   <Box p={3} sx={{ width: "100%" }}>
     <Typography variant="h4" fontWeight={700} gutterBottom>
-      🍱 C구역 조리 대기 목록
+      🍱 A구역 조리 대기 목록
     </Typography>
 
     {orders.length === 0 ? (
