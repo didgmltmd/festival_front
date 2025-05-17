@@ -19,7 +19,7 @@ export default function BSectionPage() {
 
   // 초기 알림음 unlock 설정 (iOS 대응)
   useEffect(() => {
-    audioRef.current = new Audio("/sounds/notification.mp3");
+    audioRef.current = new Audio("/sounds/1_1-요기요-가게배달-주문x1.mp3");
 
     const unlockAudio = () => {
       audioRef.current.play().catch(() => {});

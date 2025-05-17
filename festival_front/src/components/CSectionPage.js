@@ -19,7 +19,7 @@ export default function CSectionPage() {
 
   // 초기 알림음 unlock 설정 (iOS 대응)
   useEffect(() => {
-    audioRef.current = new Audio("/sounds/notification.mp3");
+    audioRef.current = new Audio("/sounds/notificationC.MP3");
 
     const unlockAudio = () => {
       audioRef.current.play().catch(() => {});

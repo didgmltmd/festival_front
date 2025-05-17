@@ -202,6 +202,7 @@ export default function CounterPage() {
         })
       }
 
+      console.log(orders);
       if(orders.length === ordersRes.data.length){
         ordersLatestData = true;
       }else{
@@ -209,7 +210,7 @@ export default function CounterPage() {
         orders.map((localData) => {
           let isDataExist = false;
           ordersRes.data.map((serverData) => {
-            if(serverData.name === localData.name){
+            if(serverData.timestamp === localData.timestamp){
               isDataExist = true;
             }
           })

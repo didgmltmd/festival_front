@@ -17,7 +17,7 @@ export default function ASectionPage() {
   const [confirmData, setConfirmData] = useState(null);
   const audioRef = useRef(null);
 
-  // ✅ iOS 대응 알림음 unlock
+  // iOS 대응 알림음 unlock
   useEffect(() => {
     audioRef.current = new Audio("/sounds/notification.mp3");
 
@@ -31,7 +31,7 @@ export default function ASectionPage() {
     window.addEventListener("click", unlockAudio);
   }, []);
 
-  // ✅ 초기 주문 불러오기
+  // 초기 주문 불러오기
   const fetchInitialOrders = async () => {
     try {
       const res = await axios.get(
@@ -43,7 +43,7 @@ export default function ASectionPage() {
     }
   };
 
-  // ✅ 서빙 완료 처리 후 직접 제거 + socket 전파
+  // 서빙 완료 처리 후 직접 제거 + socket 전파
   const confirmServe = async () => {
     if (!confirmData) return;
     const { timestamp, itemIndex } = confirmData;
@@ -53,7 +53,7 @@ export default function ASectionPage() {
         `https://festival-backend-qydq.onrender.com/api/kitchen/${timestamp}/${itemIndex}/serve`
       );
 
-      // 🔹 직접 제거
+      // 직접 제거
       setOrders((prev) =>
         prev.filter(
           (item) =>
@@ -72,9 +72,12 @@ export default function ASectionPage() {
       console.error("서빙 완료 처리 실패:", err);
       alert("서빙 처리에 실패했습니다.");
     }
-  };
+  }; 
 
-  // ✅ 소켓 이벤트 수신
+
+  console.log(orders);
+
+  // 소켓 이벤트 수신
   useEffect(() => {
     fetchInitialOrders();
 
@@ -91,7 +94,7 @@ export default function ASectionPage() {
 
     // 주문 삭제 수신
     const handleOrderDeleted = ({ timestamp, itemIndexes }) => {
-      console.log("🗑️ A구역 수신 삭제:", timestamp, itemIndexes);
+      console.log("A구역 수신 삭제:", timestamp, itemIndexes);
       setOrders((prev) =>
         prev.filter(
           (order) =>
