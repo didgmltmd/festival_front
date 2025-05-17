@@ -11,6 +11,7 @@ import OrderListModal from "../modal/OrderListModal";
 import ASectionOrderModal from "../modal/ASectionOrderModal";
 import BSectionOrderModal from "../modal/BSectionOrderModal";
 import CSectionOrderModal from "../modal/CSectionOrderModal";
+import ResetModal from "../modal/ResetModal";
 
 const PageLayout = styled(Box)`
   display: flex;
@@ -88,6 +89,7 @@ export default function CounterPage() {
   const [isASectionModalOpen, setIsASectionModalOpen] = useState(false);
   const [isBSectionModalOpen, setIsBSectionModalOpen] = useState(false);
   const [isCSectionModalOpen, setIsCSectionModalOpen] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
   const fetchOrderedData = () => {
     axios
@@ -240,6 +242,9 @@ export default function CounterPage() {
     }
   };
 
+
+
+
   return (
     <PageLayout>
       <AppBar position="static" color="primary">
@@ -254,6 +259,7 @@ export default function CounterPage() {
             <Button variant="outlined" color="inherit" onClick={() => setIsASectionModalOpen(true)}>A구역 주문</Button>
             <Button variant="outlined" color="inherit" onClick={() => setIsBSectionModalOpen(true)}>B구역 주문</Button>
             <Button variant="outlined" color="inherit" onClick={() => setIsCSectionModalOpen(true)}>C구역 주문</Button>
+            <Button variant="outlined" color="inherit" onClick={() => setIsResetModalOpen(true)}>데이터 초기화</Button>
           </Box>
         </Toolbar>
       </AppBar>
@@ -341,6 +347,12 @@ export default function CounterPage() {
         <CSectionOrderModal
             open={isCSectionModalOpen}
             onClose={() => setIsCSectionModalOpen(false)}
+        />
+
+        <ResetModal
+            open={isResetModalOpen}
+            onClose={() => setIsResetModalOpen(false)}
+            onUpdate={() => fetchOrderedData()}
         />
 
     </PageLayout>
