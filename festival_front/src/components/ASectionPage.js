@@ -22,7 +22,6 @@ export default function ASectionPage() {
     audioRef.current = new Audio("/sounds/notification.mp3");
 
     const unlockAudio = () => {
-      audioRef.current.play().catch(() => {});
       window.removeEventListener("touchstart", unlockAudio);
       window.removeEventListener("click", unlockAudio);
     };
