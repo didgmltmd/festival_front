@@ -94,6 +94,8 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
       .then(() => {
         onOrderComplete();
         setIsSummaryOpen(false);
+
+        saveToLocal();
         onClose();
       })
       .catch((err) => {

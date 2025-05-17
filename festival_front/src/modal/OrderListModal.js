@@ -49,6 +49,8 @@ export default function OrderListModal({ open, onClose, onUpdate }) {
       console.error("주문 삭제 실패:", err);
       alert("주문 삭제에 실패했습니다.");
     });
+
+    saveToLocal();
 };
 
 

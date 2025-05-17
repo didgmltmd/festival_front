@@ -39,6 +39,8 @@ export default function MenuDeleteModal({ open, onClose, onUpdate }) {
     if (!selectedMenu) return;
     try {
       await axios.delete(`https://festival-backend-qydq.onrender.com/api/menu/${selectedMenu.index}`);
+
+      saveToLocal();
       onUpdate(); // 외부 새로고침
       onClose();
     } catch (err) {
