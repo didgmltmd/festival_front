@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import MenuSelectModal from "./MenuSelectModal";
 import TableInputModal from "./TableInputModal";
+import saveToLocal from '../function/saveToLocal';
 
 export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
   const [menuList, setMenuList] = useState([]);

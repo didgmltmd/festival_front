@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from "@mui/material";
 import axios from "axios";
+import saveToLocal from '../function/saveToLocal';
 
 const zones = ["A", "B", "C", "Counter"];
 
@@ -20,6 +21,8 @@ export default function AddMenuModal({ open, onClose, onAdd }) {
 
     try {
       await axios.post("https://festival-backend-qydq.onrender.com/api/menu", newItem);
+
+      saveToLocal();
       onAdd();
       onClose();
     } catch (err) {

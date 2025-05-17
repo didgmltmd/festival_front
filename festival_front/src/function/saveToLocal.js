@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const saveToLocal = async () => {
     try {
       const [menuRes, ordersRes] = await Promise.all([
@@ -14,3 +16,6 @@ const saveToLocal = async () => {
       alert('데이터 저장에 실패했습니다.');
     }
   };
+
+
+  export default saveToLocal;

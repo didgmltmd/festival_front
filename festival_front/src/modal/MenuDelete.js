@@ -12,6 +12,7 @@ import {
   Divider,
 } from "@mui/material";
 import axios from "axios";
+import saveToLocal from '../function/saveToLocal';
 
 export default function MenuDeleteModal({ open, onClose, onUpdate }) {
   const [menuList, setMenuList] = useState([]);

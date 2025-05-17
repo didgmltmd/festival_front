@@ -13,6 +13,7 @@ import {
   Divider
 } from "@mui/material";
 import axios from "axios";
+import saveToLocal from '../function/saveToLocal';
 
 const zones = ["A", "B", "C", "Counter"];
 
@@ -50,6 +51,8 @@ export default function EditMenuModal({ open, onClose, onUpdate }) {
         price: parseInt(edited.price),
         zone: edited.zone,
       });
+
+      saveToLocal();
       onUpdate();
       onClose();
     } catch (err) {
