@@ -42,8 +42,9 @@ export default function OrderListModal({ open, onClose, onUpdate }) {
     )
     .then(() => {
       setDeleteTarget(null);
-      fetchOrders();  // 주문 리스트 다시 불러오기
-      onUpdate();     // 다른 곳에 반영 필요할 경우
+      fetchOrders();  
+      saveToLocal();
+      onUpdate();     
     })
     .catch((err) => {
       console.log(timestamp);
@@ -51,7 +52,7 @@ export default function OrderListModal({ open, onClose, onUpdate }) {
       alert("주문 삭제에 실패했습니다.");
     });
 
-    saveToLocal();
+
 };
 
 

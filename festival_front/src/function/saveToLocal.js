@@ -7,6 +7,8 @@ const saveToLocal = async () => {
         axios.get('https://festival-backend-qydq.onrender.com/api/orders'),
       ]);
 
+
+      console.log(ordersRes);
       localStorage.setItem('menuBackup', JSON.stringify(menuRes.data));
       localStorage.setItem('ordersBackup', JSON.stringify(ordersRes.data));
 
