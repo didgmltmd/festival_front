@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
+import { AppBar, Toolbar, Button, Typography, Box,Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import MenuAdd from '../modal/MenuAdd';
@@ -24,31 +24,6 @@ const Section = styled(Box)`
   flex: 1;
 `;
 
-const LeftBody = styled(Box)`
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  background-color: #f3f6f9;
-  padding: 1.5rem;
-  overflow: hidden;
-`;
-
-const ListWrapper = styled(Box)`
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 1rem;
-`;
-
-const Footer = styled(Box)`
-  padding: 0.75rem 1rem;
-  background-color: #e8f0fe;
-  border-top: 1px solid #ccc;
-  font-weight: bold;
-  font-size: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
 
 const RightBody = styled(Box)`
   flex: 1;
@@ -58,23 +33,6 @@ const RightBody = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-`;
-
-const OrderedList = styled(Box)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.2rem;
-  margin-bottom: 0.8rem;
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f9f9f9;
-  }
 `;
 
 export default function CounterPage() {
@@ -265,28 +223,78 @@ export default function CounterPage() {
       </AppBar>
 
       <Section>
-        <LeftBody>
-          <Typography variant="h6" gutterBottom>
-            📊 품목별 판매 내역
-          </Typography>
+        <Paper
+          sx={{
+            height: "92vh",
+            display: "flex",
+            flexDirection: "column",
+            borderRadius: 2,
+            overflow: "hidden", // border radius + scroll 깔끔하게
+            flex:"3"
+          }}
+        >
+          {/* 상단 제목 */}
+          <Box sx={{ p: 2, borderBottom: "1px solid #ddd" }}>
+            <Typography variant="h6" fontWeight={600}>
+              📊 품목별 판매 내역
+            </Typography>
+          </Box>
 
-          <ListWrapper>
+          {/* 스크롤되는 품목 리스트 */}
+          <Box
+            sx={{
+              flex: 1,
+              overflowY: "auto",
+              p: 2,
+              backgroundColor: "#fafafa",
+            }}
+          >
             {orderedList.map((data, idx) => (
-              <OrderedList key={idx}>
-                <Box sx={{ flex: 2, fontWeight: 600 }}>{data.name}</Box>
-                <Box sx={{ flex: 1, textAlign: "center" }}>{data.totalSold}개</Box>
-                <Box sx={{ flex: 1, textAlign: "right", color: "#1976d2", fontWeight: 500 }}>
+              <Box
+                key={idx}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  p: 2,
+                  mb: 1,
+                  backgroundColor: "#fff",
+                  borderRadius: 1,
+                  boxShadow: 1,
+                }}
+              >
+                <Typography sx={{ flex: 2, fontWeight: 600 }}>{data.name}</Typography>
+                <Typography sx={{ flex: 1, textAlign: "center" }}>{data.totalSold}개</Typography>
+                <Typography
+                  sx={{
+                    flex: 1,
+                    textAlign: "right",
+                    color: "#1976d2",
+                    fontWeight: 500,
+                  }}
+                >
                   {data.totalRevenue.toLocaleString()}원
-                </Box>
-              </OrderedList>
+                </Typography>
+              </Box>
             ))}
-          </ListWrapper>
+          </Box>
 
-          <Footer>
-            <span>총 매출</span>
-            <span style={{ color: "#d32f2f" }}>{totalSales.toLocaleString()}원</span>
-          </Footer>
-        </LeftBody>
+          {/* 하단 총 매출 고정 영역 */}
+          <Box
+            sx={{
+              p: 2,
+              backgroundColor: "#e3f2fd",
+              borderTop: "1px solid #ccc",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              fontWeight: "bold",
+            }}
+          >
+            <Typography>총 매출</Typography>
+            <Typography sx={{ color: "#d32f2f" }}>{totalSales.toLocaleString()}원</Typography>
+          </Box>
+        </Paper>
 
         <RightBody>
           <Button variant="contained" color="primary" fullWidth onClick={() => setIsOrderModalOpen(true)}>
