@@ -104,6 +104,141 @@ export default function CounterPage() {
     fetchOrderedData();
   }, []);
 
+  const postAllOrders = async (orders) => {
+    try {
+      await Promise.all(
+        orders.map((order) =>
+          axios.post(
+            'https://festival-backend-qydq.onrender.com/api/orders/complete',
+            order,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+        )
+      );
+
+    } catch (error) {
+      console.error('일부 주문 저장 실패:', error);
+      alert('주문 저장 중 오류가 발생했습니다.');
+    }
+  };
+
+  const saveDataToLocal = async () => {
+    try {
+      const [menuRes, ordersRes] = await Promise.all([
+        axios.get('https://festival-backend-qydq.onrender.com/api/menu'),
+        axios.get('https://festival-backend-qydq.onrender.com/api/orders'),
+      ]);
+
+      localStorage.setItem('menuBackup', JSON.stringify(menuRes.data));
+      localStorage.setItem('ordersBackup', JSON.stringify(ordersRes.data));
+
+      alert('데이터가 localStorage에 저장되었습니다.');
+    } catch (error) {
+      console.error('데이터 저장 실패:', error);
+      alert('데이터 저장에 실패했습니다.');
+    }
+  };
+  const addMenuItem = async (data) => {
+  try {
+    const newMenu = {
+      name: data.name,
+      price: data.price,
+      zone: data.zone,
+    };
+
+    const response = await axios.post(
+      'https://festival-backend-qydq.onrender.com/api/menu',
+      newMenu,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    } catch (error) {
+      alert('메뉴 추가중 오류발생생');
+    }
+  };
+
+  const loadDataFromLocal = async () => {
+    try {
+      const [menuRes, ordersRes] = await Promise.all([
+        axios.get('https://festival-backend-qydq.onrender.com/api/menu'),
+        axios.get('https://festival-backend-qydq.onrender.com/api/orders'),
+      ]);
+
+      const orders = JSON.parse(localStorage.getItem('ordersBackup'));
+      const menu = JSON.parse(localStorage.getItem('menuBackup'));
+      let menuLatestData = false;
+      let ordersLatestData = false;
+      let updateMenuLilst = false;
+      let updateOrdersList = false;
+
+      if(menu.length === menuRes.data.length){
+        menuLatestData = true;
+      }else{
+        let dropedMenuData = [];
+        menu.map((localData) => {
+          let isDataExist = false;
+          menuRes.data.map((serverData) => {
+            if(serverData.name === localData.name){
+              isDataExist = true;
+            }
+          })
+
+          if(!isDataExist){
+            dropedMenuData.push(localData);
+          }
+        })
+
+        dropedMenuData.map((data) => {
+          addMenuItem(data);
+          updateMenuLilst = true;
+        })
+      }
+
+      if(orders.length === ordersRes.data.length){
+        ordersLatestData = true;
+      }else{
+        let dropedOrderData = [];
+        orders.map((localData) => {
+          let isDataExist = false;
+          ordersRes.data.map((serverData) => {
+            if(serverData.name === localData.name){
+              isDataExist = true;
+            }
+          })
+
+          if(!isDataExist){
+            dropedOrderData.push(localData);
+          }
+        })
+        postAllOrders(dropedOrderData);
+        updateOrdersList = true;
+      }
+
+
+      if(menuLatestData && ordersLatestData){
+        console.log(menu,menuRes);
+        console.log(orders,ordersRes);
+        alert("데이터가 최신입니다.");
+      }else{
+        if(updateMenuLilst || updateOrdersList){
+          alert("데이터가 업데이트되었습니다.");
+        }
+      }
+
+      fetchOrderedData();
+    } catch (error) {
+      alert("데이터 업데이트 중 오류발생",error);
+    }
+  };
+
   return (
     <PageLayout>
       <AppBar position="static" color="primary">
@@ -112,6 +247,8 @@ export default function CounterPage() {
             카운터 페이지
           </Typography>
           <Box sx={{ display: "flex", gap: "1rem", ml: "auto" }}>
+            <Button variant="outlined" color="inherit" onClick={saveDataToLocal}>로컬로 저장하기</Button>
+            <Button variant="outlined" color="inherit" onClick={loadDataFromLocal}>로컬정보 불러오기</Button>
             <Button variant="outlined" color="inherit" onClick={() => setIsOrderListModalOpen(true)}>주문내역 확인</Button>
             <Button variant="outlined" color="inherit" onClick={() => setIsASectionModalOpen(true)}>A구역 주문</Button>
             <Button variant="outlined" color="inherit" onClick={() => setIsBSectionModalOpen(true)}>B구역 주문</Button>
