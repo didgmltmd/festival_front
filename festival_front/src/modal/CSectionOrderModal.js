@@ -27,7 +27,7 @@ export default function CSectionOrderModal({ open, onClose }) {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>🍱 A구역 주문 내역</DialogTitle>
+      <DialogTitle>🍱 C구역 주문 내역</DialogTitle>
       <DialogContent dividers>
         {orders.length === 0 ? (
           <Typography color="textSecondary">현재 C구역에 주문이 없습니다.</Typography>
