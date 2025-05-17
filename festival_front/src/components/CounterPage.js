@@ -32,6 +32,9 @@ const RightBody = styled(Box)`
   border-left: 1px solid #ddd;
   display: flex;
   flex-direction: column;
+    justifyContent: "space-between",
+  width:100vh;
+  height:87vh;
   gap: 1rem;
 `;
 
@@ -229,7 +232,7 @@ export default function CounterPage() {
             display: "flex",
             flexDirection: "column",
             borderRadius: 2,
-            overflow: "hidden", // border radius + scroll 깔끔하게
+            overflow: "hidden", 
             flex:"3"
           }}
         >
@@ -297,18 +300,57 @@ export default function CounterPage() {
         </Paper>
 
         <RightBody>
-          <Button variant="contained" color="primary" fullWidth onClick={() => setIsOrderModalOpen(true)}>
-            주문서 작성
-          </Button>
-          <Button variant="contained" color="secondary" fullWidth onClick={() => setIsMenuAddModalOpen(true)}>
-            메뉴 추가
-          </Button>
-          <Button variant="outlined" color="warning" fullWidth onClick={() => setIsMenuEditModalOpen(true)}>
-            메뉴 수정
-          </Button>
-          <Button variant="outlined" color="error" fullWidth onClick={() => setIsMenuDeleteModalOpen(true)}>
-            메뉴 삭제
-          </Button>
+          <Box
+            sx={{
+              display:"flex",
+              flex:"3",
+              flexDirection: "column",
+            }}
+          >
+            <Button 
+              sx={{
+                height:"10rem",
+                marginTop:"2rem"
+              }}
+            variant="contained" color="primary" fullWidth onClick={() => setIsOrderModalOpen(true)}>
+              주문서 작성
+            </Button>
+          </Box>
+          <Box
+            sx={{
+              display:"flex",
+              flexDirection:"column",
+              flex:"1",
+            }}
+          >
+            <Button 
+              sx={{
+                display:"flex",
+                flex:"1",
+                marginBottom:"1rem"
+              }}
+            variant="contained" color="secondary" fullWidth onClick={() => setIsMenuAddModalOpen(true)}>
+              메뉴 추가
+            </Button>
+            <Button 
+              sx={{
+                  display:"flex",
+                  flex:"1",
+                  marginBottom:"1rem"
+                }}
+            variant="outlined" color="warning" fullWidth onClick={() => setIsMenuEditModalOpen(true)}>
+              메뉴 수정
+            </Button>
+            <Button 
+              sx={{
+                display:"flex",
+                flex:"1",
+                marginBottom:"1rem"
+              }}
+            variant="outlined" color="error" fullWidth onClick={() => setIsMenuDeleteModalOpen(true)}>
+              메뉴 삭제
+            </Button>
+          </Box>
         </RightBody>
       </Section>
 

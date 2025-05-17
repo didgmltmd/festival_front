@@ -14,7 +14,7 @@ export default function TableInputModal({ open, onClose, onSubmit }) {
   const [xValue,setXValue] = useState();
   const [yValue,setYValue] = useState();
 
-  const tableXPosition = ["A","B","C","D","E","F","G","H","I","J"];
+  const tableXPosition = ["A","B","C","D","E","F","G","H","I","J","K","L"];
   const tableYPosition = ["1","2","3","4","5","6","7","8","9","10"];
 
   const handleSubmit = () => {
