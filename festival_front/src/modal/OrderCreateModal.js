@@ -107,65 +107,76 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-        <DialogTitle>📝 주문서 작성</DialogTitle>
-        <DialogContent sx={{ display: "flex", gap: 2 }}>
-          <Box sx={{ flex: 1, backgroundColor: "#f5f5f5", p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              🛒 장바구니
+     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+      <DialogTitle>📝 주문서 작성</DialogTitle>
+      <DialogContent sx={{ display: "flex", gap: 2 }}>
+        {/* 장바구니 - 고정 영역 */}
+        <Box sx={{ flex: 1, backgroundColor: "#f5f5f5", p: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            🛒 장바구니
+          </Typography>
+          <List>
+            {cart.map((item, idx) => (
+              <ListItem key={idx} divider>
+                <ListItemText
+                  primary={`${item.name} (${item.quantity}개)`}
+                  secondary={`${item.total.toLocaleString()}원`}
+                />
+                <IconButton onClick={() => handleRemoveItem(idx)}>
+                  <DeleteIcon />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+          <Box sx={{ textAlign: "right", mt: 2 }}>
+            <Typography variant="subtitle1">
+              총액: {cart.reduce((acc, item) => acc + item.total, 0).toLocaleString()}원
             </Typography>
-            <List>
-              {cart.map((item, idx) => (
-                <ListItem key={idx} divider>
-                  <ListItemText
-                    primary={`${item.name} (${item.quantity}개)`}
-                    secondary={`${item.total.toLocaleString()}원`}
-                  />
-                  <IconButton onClick={() => handleRemoveItem(idx)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItem>
-              ))}
-            </List>
-            <Box sx={{ textAlign: "right", mt: 2 }}>
-              <Typography variant="subtitle1">
-                총액: {cart.reduce((acc, item) => acc + item.total, 0).toLocaleString()}원
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={cart.length === 0}
-                onClick={() => setIsTableModalOpen(true)}
-                sx={{ mt: 1 }}
-              >
-                주문 완료
-              </Button>
-            </Box>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={cart.length === 0}
+              onClick={() => setIsTableModalOpen(true)}
+              sx={{ mt: 1 }}
+            >
+              주문 완료
+            </Button>
           </Box>
+        </Box>
 
-          <Box sx={{ flex: 1, backgroundColor: "#fff", p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              📋 메뉴
-            </Typography>
-            <List>
-              {menuList.map((item, idx) => (
-                <React.Fragment key={idx}>
-                  <ListItem button onClick={() => setSelectedMenu(item)}>
-                    <ListItemText
-                      primary={`${item.name} (${item.zone})`}
-                      secondary={`${item.price.toLocaleString()}원`}
-                    />
-                  </ListItem>
-                  <Divider />
-                </React.Fragment>
-              ))}
-            </List>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>닫기</Button>
-        </DialogActions>
-      </Dialog>
+        {/* 메뉴 - 스크롤 영역 */}
+        <Box
+          sx={{
+            flex: 1,
+            backgroundColor: "#fff",
+            p: 2,
+            maxHeight: "60vh",
+            overflowY: "auto",
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            📋 메뉴
+          </Typography>
+          <List>
+            {menuList.map((item, idx) => (
+              <React.Fragment key={idx}>
+                <ListItem button onClick={() => setSelectedMenu(item)}>
+                  <ListItemText
+                    primary={`${item.name} (${item.zone})`}
+                    secondary={`${item.price.toLocaleString()}원`}
+                  />
+                </ListItem>
+                <Divider />
+              </React.Fragment>
+            ))}
+          </List>
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>닫기</Button>
+      </DialogActions>
+    </Dialog>
+
 
       {selectedMenu && (
         <MenuSelectModal
