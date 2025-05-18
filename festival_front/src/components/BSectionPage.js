@@ -14,7 +14,7 @@ export default function BSectionPage() {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    audioRef.current = new Audio("/1_1-요기요-가게배달-주문x1.mp3");
+    audioRef.current = new Audio("/sounds/1_1-요기요-가게배달-주문x1.mp3");
 
     const unlockAudio = () => {
       audioRef.current.play().catch(() => {});

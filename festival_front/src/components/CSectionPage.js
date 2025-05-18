@@ -15,7 +15,7 @@ export default function CSectionPage() {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    audioRef.current = new Audio("/notificationC.MP3");
+    audioRef.current = new Audio("/sounds/notificationC.MP3");
 
     const unlockAudio = () => {
       audioRef.current.play().catch(() => {});
