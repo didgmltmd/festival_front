@@ -146,7 +146,7 @@ export default function BSectionPage() {
               <Typography variant="h3" fontWeight={700} gutterBottom>
                 {item.name} ({item.quantity}개)
               </Typography>
-              <Typography variant="h5" color="textSecondary">
+              <Typography variant="h4" color="error">
                 테이블 번호: {item.tableNumber}
               </Typography>
             </Paper>
