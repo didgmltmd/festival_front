@@ -6,7 +6,8 @@ import {
   DialogActions,
   ToggleButton,
   ToggleButtonGroup,
-  Button
+  Button,
+  Stack
 } from "@mui/material";
 
 
@@ -14,8 +15,9 @@ export default function TableInputModal({ open, onClose, onSubmit }) {
   const [xValue,setXValue] = useState();
   const [yValue,setYValue] = useState();
 
-  const tableXPosition = ["A","B","C","D","E","F","G","H","I","J","K","L"];
-  const tableYPosition = ["1","2","3","4","5","6","7","8","9","10"];
+  const tableXPosition = ["A","B","C","D","E","F","G"];
+  const tableYPosition1 = ["1","2","3","4","5","6","7","8"];
+  const tableYPosition2 = ["9","10","11","12","13","14","15"];
 
   const handleSubmit = () => {
     const parsed = xValue + "-" + yValue;
@@ -69,31 +71,68 @@ export default function TableInputModal({ open, onClose, onSubmit }) {
               </ToggleButton>
             ))}
         </ToggleButtonGroup>
-         
-         <ToggleButtonGroup
+        
+        <Stack spacing={1} direction="column">
+          <ToggleButtonGroup
             value={yValue}
             exclusive
             onChange={handleYChange}
-            aria-label="X table position"
+            aria-label="X table position - row 1"
           >
-            {tableYPosition.map((item) => (
-              <ToggleButton key={item} value={item} aria-label={item} color="primary"
-                  sx={{
-                      width: 48,
-                      height: 48,
-                      fontWeight: 'bold',
-                      '&.Mui-selected': {
-                        backgroundColor: 'primary.main',
-                        color: 'white',
-                      },
-                      '&.Mui-selected:hover': {
-                        backgroundColor: 'primary.dark',
-                      },
-                  }}>
+            {tableYPosition1.map((item) => (
+              <ToggleButton
+                key={item}
+                value={item}
+                aria-label={item}
+                color="primary"
+                sx={{
+                  width: 48,
+                  height: 48,
+                  fontWeight: 'bold',
+                  '&.Mui-selected': {
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                  },
+                  '&.Mui-selected:hover': {
+                    backgroundColor: 'primary.dark',
+                  },
+                }}
+              >
                 {item}
               </ToggleButton>
             ))}
-        </ToggleButtonGroup>
+          </ToggleButtonGroup>
+
+          <ToggleButtonGroup
+            value={yValue}
+            exclusive
+            onChange={handleYChange}
+            aria-label="X table position - row 2"
+          >
+            {tableYPosition2.map((item) => (
+              <ToggleButton
+                key={item}
+                value={item}
+                aria-label={item}
+                color="primary"
+                sx={{
+                  width: 48,
+                  height: 48,
+                  fontWeight: 'bold',
+                  '&.Mui-selected': {
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                  },
+                  '&.Mui-selected:hover': {
+                    backgroundColor: 'primary.dark',
+                  },
+                }}
+              >
+                {item}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+        </Stack>
 
 
       </DialogContent>
