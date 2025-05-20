@@ -19,6 +19,9 @@ export default function MenuSelectModal({ menu, onClose, onConfirm }) {
       alert("수량은 1개 이상이어야 합니다.");
       return;
     }
+
+
+    
     onConfirm(menu, quantity);
     onClose();
   };

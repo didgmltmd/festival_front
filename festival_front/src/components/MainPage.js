@@ -45,7 +45,8 @@ export default function MainPage() {
         <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/C")}>C 구역</ZoneButton>
         <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/AServer")}>A 구역 서버</ZoneButton>
         <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/BServer")}>B 구역 서버</ZoneButton>
-        <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/CServer")}>C 구역 서버버</ZoneButton>
+        <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/kitchen/CServer")}>C 구역 서버</ZoneButton>
+        <ZoneButton variant="contained" color="secondary" onClick={() => navigate("/drunkOutsider")}>술 관리</ZoneButton>
       </ButtonGroup>
     </Container>
   );

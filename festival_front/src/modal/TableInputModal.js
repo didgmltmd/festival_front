@@ -17,7 +17,7 @@ export default function TableInputModal({ open, onClose, onSubmit }) {
 
   const tableXPosition = ["A","B","C","D","E","F","G"];
   const tableYPosition1 = ["1","2","3","4","5","6","7","8"];
-  const tableYPosition2 = ["9","10","11","12","13","14","15"];
+  const tableYPosition2 = ["9","10","11","12"];
 
   const handleSubmit = () => {
     const parsed = xValue + "-" + yValue;

@@ -8,6 +8,7 @@ import { Routes, Route  } from 'react-router-dom';
 import ASectionServerPage from './components/ASectionServerPage';
 import BSectionServerPage from './components/BSectionServerPage';
 import CSectionServerPage from './components/CSectionServerPage';
+import DrunkPage from './components/DrunkPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/kitchen/AServer" element={<ASectionServerPage />} />
         <Route path="/kitchen/BServer" element={<BSectionServerPage />} />
         <Route path="/kitchen/CServer" element={<CSectionServerPage />} />
+        <Route path="/drunkOutsider" element={<DrunkPage />} />
       </Routes>
     </>
   );

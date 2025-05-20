@@ -26,6 +26,19 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [tableNumber, setTableNumber] = useState(null);
+  const [outsider,setOutsider] = useState(false);
+  const menuDetail = {
+    '소세지야채볶음':2,
+    '통삼겹마늘간장볶음':2,
+    '두부제육볶음':2,
+    '골뱅이 소면':2,
+    '양념감자':1,
+    '오뎅탕':1,
+    '비빔납작만두':1,
+    '황도':1
+
+  }
+  
 
   const fetchMenu = async () => {
     try {
@@ -80,30 +93,78 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
     setCart(updated);
   };
 
+  const handleOutsider = () => {
+    setOutsider(!outsider);
+  }
+
   const handleOrderSubmit = () => {
-    const totalPrice = cart.reduce((acc, item) => acc + item.total, 0);
-    const orderData = {
+  const updatedCart = outsider
+    ? cart.map((item) => {
+        if (menuDetail[item.name]) {
+          const surcharge = menuDetail[item.name] === 2 ? 4000 : 2000;
+          return {
+            ...item,
+            price: item.price + surcharge,
+            total: item.total + surcharge,
+          };
+        }
+        return item;
+      })
+    : cart;
+
+  const totalPrice = updatedCart.reduce((acc, item) => acc + item.total, 0);
+
+  const orderData = {
+    tableNumber,
+    items: updatedCart,
+    totalPrice,
+    timestamp: new Date().toISOString(),
+    served: false,
+    outsider: outsider,
+  };
+
+  // ✅ 주문 저장 요청
+  axios
+    .post("https://festival-backend-qydq.onrender.com/api/orders/complete", orderData)
+    .then(() => {
+      onOrderComplete();
+      setIsSummaryOpen(false);
+      saveToLocal();
+      onClose();
+    })
+    .catch((err) => {
+      console.error("주문 저장 실패:", err);
+      alert("주문 저장에 실패했습니다.");
+    });
+
+  // ✅ 외부 손님일 경우 추가 저장
+  if (outsider) {
+    let drinking = 0;
+    updatedCart.forEach((item) => {
+      if (menuDetail[item.name]) {
+        drinking += menuDetail[item.name] * item.quantity;
+      }
+    });
+
+    const drunkOrderData = {
       tableNumber,
-      items: cart,
-      totalPrice,
+      items: updatedCart.map(({ name, quantity, zone }) => ({ name, quantity, zone })),
       timestamp: new Date().toISOString(),
-      served: false,
+      drinking,
     };
 
     axios
-      .post("https://festival-backend-qydq.onrender.com/api/orders/complete", orderData)
-      .then(() => {
-        onOrderComplete();
-        setIsSummaryOpen(false);
-
-        saveToLocal();
-        onClose();
+      .post("https://festival-backend-qydq.onrender.com/api/drunk-orders", drunkOrderData)
+      .then((res) => {
+        console.log("외부 손님 술 주문 저장 성공:", res.data);
       })
       .catch((err) => {
-        console.error("주문 저장 실패:", err);
-        alert("주문 저장에 실패했습니다.");
+        console.error("외부 손님 술 주문 저장 실패:", err);
       });
-  };
+  }
+};
+
+
 
   return (
     <>
@@ -221,6 +282,14 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
           </Typography>
         </DialogContent>
         <DialogActions>
+          <Button 
+          variant="contained"
+          sx={{
+            backgroundColor: outsider ? 'red' : 'primary',
+            }}
+           onClick={handleOutsider} >
+            {outsider ? '외부인' : '재학생'}
+          </Button>
           <Button onClick={handleOrderSubmit} variant="contained" color="primary">
             주문 확정
           </Button>
