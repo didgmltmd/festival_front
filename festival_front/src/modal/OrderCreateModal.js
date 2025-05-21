@@ -29,7 +29,7 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
   const [outsider,setOutsider] = useState(false);
   const menuDetail = {
     '소세지야채볶음':2,
-    '통삼겹마늘간장볶음':2,
+    '통삼겹마늘구이':2,
     '두부제육볶음':2,
     '골뱅이 소면':2,
     '양념감자':1,
