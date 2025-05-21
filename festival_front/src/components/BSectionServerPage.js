@@ -137,7 +137,7 @@ export default function BSectionServerPage() {
             <Typography variant="h3" fontWeight={600}>
               {item.name} ({item.quantity}개)
             </Typography>
-            <Typography variant="h5" color="textSecondary" sx={{ mb: 1 }}>
+            <Typography variant="h5" color="error" sx={{ mb: 1 }}>
               테이블 번호: {item.tableNumber}
             </Typography>
             <Button

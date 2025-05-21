@@ -98,70 +98,71 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
   }
 
   const handleOrderSubmit = () => {
-  const updatedCart = outsider
-    ? cart.map((item) => {
-        if (menuDetail[item.name]) {
-          const surcharge = menuDetail[item.name] === 2 ? 4000 : 2000;
-          return {
-            ...item,
-            price: item.price + surcharge,
-            total: item.total + surcharge,
-          };
-        }
-        return item;
-      })
-    : cart;
+    const updatedCart = outsider
+      ? cart.map((item) => {
+          if (menuDetail[item.name]) {
+            const surcharge = menuDetail[item.name] === 2 ? 4000 : 2000;
+            return {
+              ...item,
+              price: item.price + surcharge,
+              total: item.total + surcharge,
+            };
+          }
+          return item;
+        })
+      : cart;
 
-  const totalPrice = updatedCart.reduce((acc, item) => acc + item.total, 0);
+    const totalPrice = updatedCart.reduce((acc, item) => acc + item.total, 0);
 
-  const orderData = {
-    tableNumber,
-    items: updatedCart,
-    totalPrice,
-    timestamp: new Date().toISOString(),
-    served: false,
-    outsider: outsider,
-  };
-
-  // ✅ 주문 저장 요청
-  axios
-    .post("https://festival-backend-qydq.onrender.com/api/orders/complete", orderData)
-    .then(() => {
-      onOrderComplete();
-      setIsSummaryOpen(false);
-      saveToLocal();
-      onClose();
-    })
-    .catch((err) => {
-      console.error("주문 저장 실패:", err);
-      alert("주문 저장에 실패했습니다.");
-    });
-
-  // ✅ 외부 손님일 경우 추가 저장
-  if (outsider) {
-    let drinking = 0;
-    updatedCart.forEach((item) => {
-      if (menuDetail[item.name]) {
-        drinking += menuDetail[item.name] * item.quantity;
-      }
-    });
-
-    const drunkOrderData = {
+    const orderData = {
       tableNumber,
-      items: updatedCart.map(({ name, quantity, zone }) => ({ name, quantity, zone })),
+      items: updatedCart,
+      totalPrice,
       timestamp: new Date().toISOString(),
-      drinking,
+      served: false,
+      outsider: outsider,
     };
 
+    // ✅ 주문 저장 요청
     axios
-      .post("https://festival-backend-qydq.onrender.com/api/drunk-orders", drunkOrderData)
-      .then((res) => {
-        console.log("외부 손님 술 주문 저장 성공:", res.data);
+      .post("https://festival-backend-qydq.onrender.com/api/orders/complete", orderData)
+      .then(() => {
+        onOrderComplete();
+        setIsSummaryOpen(false);
+        saveToLocal();
+        onClose();
       })
       .catch((err) => {
-        console.error("외부 손님 술 주문 저장 실패:", err);
+        console.error("주문 저장 실패:", err);
+        alert("주문 저장에 실패했습니다.");
       });
-  }
+
+    // ✅ 외부 손님일 경우 추가 저장
+    if (outsider) {
+      let drinking = 0;
+      updatedCart.forEach((item) => {
+        if (menuDetail[item.name]) {
+          drinking += menuDetail[item.name] * item.quantity;
+        }
+      });
+
+      const drunkOrderData = {
+        tableNumber,
+        items: updatedCart.map(({ name, quantity, zone }) => ({ name, quantity, zone })),
+        timestamp: new Date().toISOString(),
+        drinking,
+      };
+
+      axios
+        .post("https://festival-backend-qydq.onrender.com/api/drunk-orders", drunkOrderData)
+        .then((res) => {
+          console.log("외부 손님 술 주문 저장 성공:", res.data);
+        })
+        .catch((err) => {
+          console.error("외부 손님 술 주문 저장 실패:", err);
+        });
+    }
+
 };
 
 
