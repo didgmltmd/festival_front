@@ -30,6 +30,7 @@ export default function ResetModal({open, onClose,onUpdate}) {
             .catch((err) => {
             });
         })
+        const res = await axios.delete('/api/drunk-orders');
 
     } catch (error) {
       console.error('데이터 초기화화 실패:', error);

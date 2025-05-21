@@ -134,10 +134,10 @@ export default function BSectionServerPage() {
             elevation={2}
             sx={{ p: 2, mb: 2, borderLeft: "4px solid #4caf50" }}
           >
-            <Typography variant="subtitle1" fontWeight={600}>
+            <Typography variant="h3" fontWeight={600}>
               {item.name} ({item.quantity}개)
             </Typography>
-            <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+            <Typography variant="h5" color="textSecondary" sx={{ mb: 1 }}>
               테이블 번호: {item.tableNumber}
             </Typography>
             <Button
