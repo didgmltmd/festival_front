@@ -34,6 +34,7 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
     '골뱅이 소면':2,
     '오뎅탕':1,
     '비빔납작만두':1,
+    '우동':1,
     '황도':1,
     '양념감자':0
   }
