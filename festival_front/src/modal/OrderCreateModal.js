@@ -32,11 +32,10 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
     '통삼겹마늘구이':2,
     '두부제육볶음':2,
     '골뱅이 소면':2,
-    '양념감자':1,
     '오뎅탕':1,
     '비빔납작만두':1,
-    '황도':1
-
+    '황도':1,
+    '양념감자':0
   }
   
 
@@ -101,7 +100,7 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
     const updatedCart = outsider
       ? cart.map((item) => {
           if (menuDetail[item.name]) {
-            const surcharge = menuDetail[item.name] === 2 ? 4000 : 2000;
+            const surcharge = menuDetail[item.name] === 2 ? 4000 : menuDetail[item.name] === 1 ? 2000 : 0;
             return {
               ...item,
               price: item.price + surcharge,

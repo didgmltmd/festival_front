@@ -36,7 +36,7 @@ export default function DrunkPage() {
     '우동':1
   };
 
-  // ✅ 주문의 술 수치를 계산하는 함수 (공통으로 사용)
+  // 주문의 술 수치를 계산하는 함수 (공통으로 사용)
   const calculateDrinking = (items) => {
     let total = 0;
     items.forEach((item) => {
