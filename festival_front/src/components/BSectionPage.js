@@ -69,7 +69,7 @@ export default function BSectionPage() {
 
     const handleNewOrder = (data) => {
       if (Array.isArray(data)) {
-        setOrders((prev) => [...prev, ...data]);
+        setOrders((prev) => [...data,...prev]);
         audioRef.current?.play().catch((err) => {
           console.warn("🔇 오디오 재생 실패:", err);
         });
