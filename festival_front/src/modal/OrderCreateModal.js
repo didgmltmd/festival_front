@@ -264,38 +264,65 @@ export default function OrderCreateModal({ open, onClose, onOrderComplete }) {
       )}
 
       <Dialog open={isSummaryOpen} onClose={() => setIsSummaryOpen(false)}>
-        <DialogTitle>🧾 주문 확인</DialogTitle>
-        <DialogContent>
-          <Typography variant="subtitle1">테이블 번호: {tableNumber}</Typography>
-          <List>
-            {cart.map((item, idx) => (
-              <ListItem key={idx}>
-                <ListItemText
-                  primary={`${item.name} (${item.quantity}개)`}
-                  secondary={`${item.total.toLocaleString()}원`}
-                />
-              </ListItem>
-            ))}
-          </List>
-          <Typography sx={{ mt: 2 }}>
-            총액: {cart.reduce((acc, item) => acc + item.total, 0).toLocaleString()}원
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button 
-          variant="contained"
-          sx={{
-            backgroundColor: outsider ? 'red' : 'primary',
-            }}
-           onClick={handleOutsider} >
-            {outsider ? '외부인' : '재학생'}
-          </Button>
-          <Button onClick={handleOrderSubmit} variant="contained" color="primary">
-            주문 확정
-          </Button>
-          <Button onClick={() => setIsSummaryOpen(false)}>취소</Button>
-        </DialogActions>
-      </Dialog>
+  <DialogTitle>🧾 주문 확인</DialogTitle>
+  <DialogContent>
+    <Typography variant="subtitle1">테이블 번호: {tableNumber}</Typography>
+    <List>
+      {cart.map((item, idx) => {
+        let adjustedPrice = item.price;
+        let adjustedTotal = item.total;
+
+        if (outsider && menuDetail[item.name]) {
+          const surcharge = menuDetail[item.name] === 2 ? 4000 : menuDetail[item.name] === 1 ? 2000 : 0;
+          adjustedPrice = item.price + surcharge;
+          adjustedTotal = adjustedPrice * item.quantity;
+        }
+
+        return (
+          <ListItem key={idx}>
+            <ListItemText
+              primary={`${item.name} (${item.quantity}개)`}
+              secondary={`단가: ${adjustedPrice.toLocaleString()}원 / 총액: ${adjustedTotal.toLocaleString()}원`}
+            />
+          </ListItem>
+        );
+      })}
+    </List>
+    <Typography sx={{ mt: 2 }}>
+      총액:{" "}
+      {cart
+        .reduce((acc, item) => {
+          if (outsider && menuDetail[item.name]) {
+            const surcharge = menuDetail[item.name] === 2 ? 4000 : menuDetail[item.name] === 1 ? 2000 : 0;
+            return acc + (item.price + surcharge) * item.quantity;
+          } else {
+            return acc + item.total;
+          }
+        }, 0)
+        .toLocaleString()}
+      원
+    </Typography>
+  </DialogContent>
+  <DialogActions>
+    <Button
+      variant="contained"
+      sx={{
+        backgroundColor: outsider ? 'red' : 'primary.main',
+        '&:hover': {
+          backgroundColor: outsider ? 'darkred' : 'primary.dark',
+        },
+      }}
+      onClick={handleOutsider}
+    >
+      {outsider ? '외부인' : '재학생'}
+    </Button>
+    <Button onClick={handleOrderSubmit} variant="contained" color="primary">
+      주문 확정
+    </Button>
+    <Button onClick={() => setIsSummaryOpen(false)}>취소</Button>
+  </DialogActions>
+</Dialog>
+
     </>
   );
 }
