@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/festival_front/static/css/main.f855e6bc.css",
-    "main.js": "/festival_front/static/js/main.f79b7c76.js",
+    "main.js": "/festival_front/static/js/main.010a9728.js",
     "static/js/453.bc902eb4.chunk.js": "/festival_front/static/js/453.bc902eb4.chunk.js",
     "index.html": "/festival_front/index.html",
     "main.f855e6bc.css.map": "/festival_front/static/css/main.f855e6bc.css.map",
-    "main.f79b7c76.js.map": "/festival_front/static/js/main.f79b7c76.js.map",
+    "main.010a9728.js.map": "/festival_front/static/js/main.010a9728.js.map",
     "453.bc902eb4.chunk.js.map": "/festival_front/static/js/453.bc902eb4.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.f79b7c76.js"
+    "static/js/main.010a9728.js"
   ]
 }
