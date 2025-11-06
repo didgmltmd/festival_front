@@ -1,14 +1,14 @@
-import './App.css';
-import MainPage from './components/MainPage';
-import ASectionPage from './components/ASectionPage';
-import BSectionPage from './components/BSectionPage';
-import CSectionPage from './components/CSectionPage';
-import CounterPage from './components/CounterPage';
-import { Routes, Route  } from 'react-router-dom';
-import ASectionServerPage from './components/ASectionServerPage';
-import BSectionServerPage from './components/BSectionServerPage';
-import CSectionServerPage from './components/CSectionServerPage';
-import DrunkPage from './components/DrunkPage';
+import "./App.css";
+import MainPage from "./components/MainPage";
+import ASectionPage from "./components/ASectionPage";
+import BSectionPage from "./components/BSectionPage";
+import CSectionPage from "./components/CSectionPage";
+import CounterPage from "./components/CounterPage";
+import { Routes, Route } from "react-router-dom";
+import ASectionServerPage from "./components/ASectionServerPage";
+import BSectionServerPage from "./components/BSectionServerPage";
+import CSectionServerPage from "./components/CSectionServerPage";
+import DrunkPage from "./components/DrunkPage";
 
 function App() {
   return (
