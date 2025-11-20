@@ -6,6 +6,8 @@
 🌐 배포 주소: https://didgmltmd.github.io/festival_front/  
  (현재 백엔드가 Render로 배포되어있어 서버가 잠들었을경우 깨기전까지 작동이 안될 수 있습니다.)
 🖥️ 백엔드 레포: https://github.com/didgmltmd/festival_backend  
+
+내 역할: 프론트엔드 개발 (100%)
 ---
 
 ## **프로젝트 개요**
