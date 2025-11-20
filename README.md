@@ -3,7 +3,7 @@
 > 실시간으로 축제 주문, 조리, 서빙 현황을 한눈에 확인할 수 있는 프론트엔드 시스템입니다.  
 > A/B/C 구역별 주문 현황과 카운터 대시보드를 분리해 운영 효율을 극대화하고, WebSocket으로 실시간 상태를 동기화합니다.  
 
-🌐 배포 주소: https://didgmltmd.github.io/festival_front/  
+🌐 배포 주소: https://didgmltmd.github.io/festival_front/  (현재 백엔드가 Render로 배포되어있어 서버가 잠들었을경우 깨기전까지 작동이 안될 수 있습니다.)
 🖥️ 백엔드 레포: https://github.com/didgmltmd/festival_backend  
 ---
 
